@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>判断控件并限制控件格式</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function getlast(str) {
+        var count = 1;
+        for(var i=str.length-1; i>-1; i--) {
+            var last = str.substr(i,count);
+            alert(last);
+            count++;
+            var dot = last.substr(0,1);
+            alert(dot);
+            if(dot == '.') {
+                return last;
+            }
+        }               
+    }
+    var c = getlast('.1564414.6sa133.jpg');
+    console.log(c);//.jpg
+    // var b = '123456.mp4';
+    // var a = getlast(b);
+    // console.log(a);
+	</script>
+</body>
+</html>

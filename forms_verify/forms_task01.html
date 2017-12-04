@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+	<meta charset="UTF-8">
+	<title>表单一</title>
+	<style type="text/css">
+		.clearfix:after {content: "."; display: block; height:0; clear:both; visibility: hidden;}
+		.clearfix { *zoom:1; }
+
+		.input{
+			display: inline-block;
+			float: left;
+
+		}
+		.inputRed{
+			border: 1px solid red;
+		}
+		.inputGreen{
+			border: 1px solid green;
+		}
+		.container *{
+			margin: 0 5px;
+		}
+
+		.input span{
+			display: block;
+			font-size: 14px;
+			color: #bbb;
+		}
+
+		label{
+			float: left;
+		}
+
+		button{
+			float: left;
+		}
+	</style>
+</head>
+<body>
+	<div class="container clearfix">
+		<label>名称</label>
+		<div class="input">
+			<input type="text" id="input" class="inputGreen">
+			<span id="hint">名称格式正确</span>
+		</div>
+		<button id="btn">验证</button>
+	</div>
+	<script type="text/javascript">
+		var input = document.getElementById("input")
+
+		var hint = document.getElementById("hint")
+
+		var btn = document.getElementById("btn")
+
+		btn.onclick = function(){
+			 var result = check(input.value);
+			 input.className = ""
+			 switch(result){
+			 	case 0: 
+				 	hint.innerHTML = "名称不能为空";
+				 	input.className += "inputRed"
+				 	break;
+			 	case 1:
+			 		hint.innerHTML = "名称格式正确";
+			 		input.className += "inputGreen"
+			 		break;
+			 	case -1:
+			 		hint.innerHTML = "名称格式有误";
+			 		input.className += "inputRed"
+			 }
+		}
+
+		function check(str){
+			var len = 0;
+			if (str == "") {
+				//如果为空 返回0
+				return 0
+			};
+
+			for(var i=0; i<str.length; i++){
+				//获取字符编码 如果在0x00-0xff间 长度加一 否则加二
+				var c = str.charCodeAt(i)
+				if ( c > 0x00 && c < 0xff ) {
+					len++
+				} else{
+					len +=2
+				}
+			}
+
+			if(len<4 || len>16){
+				return -1
+			}
+
+			return 1
+		}
+	</script>
+
+</body></html>
