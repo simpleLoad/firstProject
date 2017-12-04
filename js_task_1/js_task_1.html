@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<title>JS练习</title>
+	<style type="text/css">
+	li{
+		display: inline-block;
+		width:auto;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		color: #fff;
+		background-color: #cd4a48;
+		margin-top: 10px;
+		margin-left: 5px;
+		padding: 0 5px;
+	}
+</style>
+</head>
+<body>
+		<input id="text-box" type="text" value="">
+		<input id="btn-left-to" type="button" value="左侧入">
+		<input id="btn-right-to" type="button" value="右侧入">
+		<input id="btn-left-out" type="button" value="左侧出">
+		<input id="btn-right-out" type="button" value="右侧出">
+		<ul id="content-box"></ul>
+		<script>
+				window.onload=function(){
+					var text_box=document.getElementById("text-box"),
+				        btn_left_to=document.getElementById("btn-left-to"),
+				        btn_right_to=document.getElementById("btn-right-to"),
+				        btn_left_out=document.getElementById("btn-left-out"),
+				        btn_right_out=document.getElementById("btn-right-out"),
+				        content_box=document.getElementById("content-box");
+				        //判断，如果有值并且符合判断条件，添加这条数据数据
+				        function insert(dir){
+				        	var reg=/(^(?:[1-9]\d|100)$)/;
+				        	if(text_box.value==""){
+				        	    alert("未输入值");
+				        	    text_box.focus();
+				            }else if(isNaN(text_box.value)){
+				        	    alert("您输入的不是数字");
+				        	    text_box.value="";
+				        	    text_box.focus();
+				            }else if(reg.test(text_box.value)){
+				        	    var content_list=document.createElement("li");
+					            content_list.innerHTML=text_box.value;
+					            if (dir==="left") {
+					        	    content_box.insertBefore(content_list,content_box.childNodes[0]);
+					        	    text_box.value="";
+					            }else if(dir==="right"){
+					        	    content_box.appendChild(content_list);
+					        	    text_box.value="";
+					            }  
+				            }else{
+				            		alert("请输入10-100之间的数字");
+					            	text_box.value="";
+					        	    text_box.focus();
+				            
+				            }
+				        }
+				        //删除数据
+				        function del(dir){
+				        	if (content_box.childNodes.length<=0) {
+				        		alert("没有可以删除的元素");
+				        		return false;
+				        	}else if (dir==="left") {
+				        		alert("删除数字："+content_box.firstChild.innerText);
+				        		content_box.removeChild(content_box.firstChild);
+				        		text_box.value="";
+				        	}else if(dir==="right"){
+				        		alert("删除数字："+content_box.lastChild.innerText);
+				        		content_box.removeChild(content_box.lastChild);
+				        		text_box.value="";
+				        	}else{
+				        		content_box.removeChild(event.target);
+				        	}
+				        }
+				        btn_left_to.addEventListener("click", function(){insert("left")}, false);
+				        btn_right_to.addEventListener("click", function(){insert("right")}, false);
+				        btn_left_out.addEventListener("click", function(){del("left")}, false);
+				        btn_right_out.addEventListener("click", function(){del("right")}, false);
+				        content_box.addEventListener('click',function(e){
+						if(e.target.nodeName.toLowerCase() == 'li'){
+							content_box.removeChild(e.target);
+						}
+					});
+				}
+		</script>
+</body>
+</html>

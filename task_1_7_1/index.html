@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	    *{padding: 20px;}
+		.flex_box{
+			display: flex;
+			align-items:center;
+			justify-content: space-between;
+		}
+		.flex_box1,.flex_box2,.flex_box3,.flex_box4{width: 150px;
+			border:thin solid #f00;
+			padding:20px;
+			flex-shrink: 0;
+			margin-top: 20px;
+		}
+		.flex_box1{height: 120px;}
+		.flex_box2{height: 100px;}
+		.flex_box3{height: 40px;}
+		.flex_box4{height: 200px;
+			border: thin solid #0f0;}
+		@media screen and (max-width: 640px){
+			.flex_box{align-items: flex-start;flex-wrap: wrap;}
+			.flex_box4{order:-1;}
+		}
+	</style>
+</head>
+<body>
+	<div class="flex_box">
+		<div class="flex_box1"></div>
+		<div class="flex_box2"></div>
+		<div class="flex_box3"></div>
+		<div class="flex_box4"></div>
+	</div>
+</body>
+</html>

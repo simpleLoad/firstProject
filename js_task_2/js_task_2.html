@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JS基础练习2</title>
+	<style type="text/css">
+	ul{margin: 0;padding: 0;display: flex;align-items: flex-end;}
+	li{
+		display: inline-block;
+		width:20px;
+		text-align: center;
+		color: #fff;
+		background-color: #cd4a48;
+		margin-left: 2px;
+		margin-top: 10px;
+		font-size:0px;
+	}
+</style>
+</head>
+<body>
+	<input id="text-box" type="text" value="">
+		<input id="btn-left-to" type="button" value="左侧入">
+		<input id="btn-right-to" type="button" value="右侧入">
+		<input id="btn-left-out" type="button" value="左侧出">
+		<input id="btn-right-out" type="button" value="右侧出">
+		<input id="btn-sort" type="button" value="排序">
+		<ul id="content-box"></ul>
+		<script>
+				window.onload=function(){
+					var text_box=document.getElementById("text-box"),
+				        btn_left_to=document.getElementById("btn-left-to"),
+				        btn_right_to=document.getElementById("btn-right-to"),
+				        btn_left_out=document.getElementById("btn-left-out"),
+				        btn_right_out=document.getElementById("btn-right-out"),
+				        btn_sort=document.getElementById('btn-sort'),
+				        content_box=document.getElementById("content-box");
+				        //判断，如果有值并且符合判断条件，添加这条数据数据
+				        function insert(dir){
+				        	var reg=/(^(?:[1-9]\d|100)$)/;
+				        	if(text_box.value==""){
+				        	    alert("未输入值");
+				        	    text_box.focus();
+				            }else if(isNaN(text_box.value)){
+				        	    alert("您输入的不是数字");
+				        	    text_box.value="";
+				        	    text_box.focus();
+				            }else if(content_box.childNodes.length==60){
+				            	alert("最多只能添加60个值,已无法增加");
+				            }else if(reg.test(text_box.value)){
+				        	    var content_list=document.createElement("li");
+				        	    content_list.innerText=text_box.value;
+					            content_list.style.height=text_box.value+'px';
+					            if (dir==="left") {
+					        	    content_box.insertBefore(content_list,content_box.childNodes[0]);
+					        	    text_box.value="";
+					        	    text_box.focus();
+					            }else if(dir==="right"){
+					        	    content_box.appendChild(content_list);
+					        	    text_box.value="";
+					        	    text_box.focus();
+					            }  
+				            }else{
+				            		alert("请输入10-100之间的数字");
+					            	text_box.value="";
+					        	    text_box.focus();
+				            
+				            }
+				        }
+				        //删除数据
+				        function del(dir){
+				        	if (content_box.childNodes.length<=0) {
+				        		alert("没有可以删除的元素");
+				        		return false;
+				        	}else if (dir==="left") {
+				        		alert("删除数字："+content_box.firstChild.innerText);
+				        		content_box.removeChild(content_box.firstChild);
+				        		text_box.value="";
+				        	}else if(dir==="right"){
+				        		alert("删除数字："+content_box.lastChild.innerText);
+				        		content_box.removeChild(content_box.lastChild);
+				        		text_box.value="";
+				        	}else{
+				        		content_box.removeChild(event.target);
+				        	}
+				        }
+				   //       function bubbleSort(arr) {
+							//     var len = arr.length;
+							//     for (var i = 0; i < len; i++) {
+							//         for (var j = 0; j < len - 1 - i; j++) {
+							//             if (arr[j] > arr[j+1]) {        //相邻元素两两对比
+							//                 var temp = arr[j+1];        //元素交换
+							//                 arr[j+1] = arr[j];
+							//                 arr[j] = temp;
+							//             }
+							//         }
+							//     }
+							//     return arr;
+							// }
+							//选择排序
+							function selectionSort(arr) {
+						    var len = arr.length;
+						    var minIndex, temp;
+						    for (var i = 0; i < len - 1; i++) {
+						        minIndex = i;
+						        for (var j = i + 1; j < len; j++) {
+						            if (arr[j] < arr[minIndex]) {     //寻找最小的数
+						                minIndex = j;                 //将最小数的索引保存
+						            }
+						        }
+						        temp = arr[i];
+						        arr[i] = arr[minIndex];
+						        arr[minIndex] = temp;
+						    }
+						    return arr;
+						}
+				        btn_left_to.addEventListener("click", function(){insert("left")}, false);
+				        btn_right_to.addEventListener("click", function(){insert("right")}, false);
+				        btn_left_out.addEventListener("click", function(){del("left")}, false);
+				        btn_right_out.addEventListener("click", function(){del("right")}, false);
+				         btn_sort.addEventListener("click", function(){
+				         	var newArray=[];
+						    for(var i=0;i<content_box.childNodes.length;i++){
+						            newArray.push(content_box.childNodes[i].innerText);
+						    }
+						    // 方法一：Javascript内置方法Array.prototype.sort();
+						    // newArray.sort(function(a,b){
+						    // 	return a-b;
+						    // })
+						    //冒泡排序
+						    // bubbleSort(newArray);
+						    // 选择排序
+						    selectionSort(newArray);
+						    for (var x = 0; x < newArray.length; x++) {
+						    	content_box.removeChild(content_box.firstChild);
+						    	 var content_list=document.createElement("li");
+					            content_list.style.height=newArray[x]+'px';
+					            content_list.innerText=newArray[x];
+					            content_box.appendChild(content_list);
+						    }
+				         }, false);
+				        content_box.addEventListener('click',function(e){
+						if(e.target.nodeName.toLowerCase() == 'li'){
+							content_box.removeChild(e.target);
+						}
+					});
+				}
+		</script>
+</body>
+</html>

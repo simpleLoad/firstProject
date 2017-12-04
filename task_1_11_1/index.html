@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+	<title>practice</title>
+	<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+	<style type="text/css">
+		*{
+			margin:0;
+			padding:0;
+		}
+		nav,ul,li,img{display: block;}
+		body{
+			font-size: 16px;
+			margin: 0 auto;
+		}
+		.page_head{
+			width: 100%;
+			height: 3rem;
+			background-color: #91d4da;
+			color: #fff;
+			line-height: 3rem;
+		}
+		.return_btn{
+			width: 15%;
+			float: left;
+			padding-left: 8%;
+			background-image: url(images/return.png);
+			background-repeat: no-repeat;
+			background-position: 15% center;
+			background-size: 30%;
+		}
+		.page_title{
+			width: 60%;
+			float: left;
+			padding-left: 17%;
+			font-size:18px;
+		}
+		.page_nav{
+			width: 100%;
+			height: 3.2rem;
+		}
+		.page_nav ul{
+			width: 100%;
+			height: 100%;
+		}
+		.page_nav li{
+			width:20%;
+			float: left;
+			color:#000;
+			text-align: center;
+			height: 3rem;
+			line-height: 3rem;
+		}
+		.on{
+			border-bottom:0.2rem solid #91d4da;
+		}
+		.page_picture{
+			width: 100%;
+			min-height: 3rem;
+			height:auto;
+			overflow: auto;
+		}
+		.page_picture img{
+			width: 100%;
+		}
+		.page_tag{
+			width: 95%;
+			height:auto;
+			min-height: 2rem;
+			overflow: auto;
+			border-bottom: 0.08rem solid #e5e5e5;
+			padding: 0.2rem 0 1rem 0;
+			margin:0 2.5%;
+		}
+		.page_tag li{
+			width: 20%;
+			float:left;
+			min-height: 2rem;
+			overflow: auto;
+		}
+		.picture_box{
+			width: 75%;
+			padding: 12.5%;
+			margin: 0 auto;
+		}
+		.picture_box img{
+			width: 100%;
+			margin: 0 auto;
+		}
+		.picture_intro{
+			text-align: center;
+			font-size: 13px;
+		}
+		.page_column{width: 95%;
+			min-height: 2rem;
+			height: auto;
+			overflow: auto;
+			margin:1rem 2.5%;
+		}
+		.page_column li{
+			width: 33.33333333%;
+			float: left;
+			min-height: 2rem;
+			height: auto;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-around;
+		}
+		.page_column li p{
+			width: 80%;
+			margin:0 auto;
+		}
+		.column_img{
+			display: flex;
+			align-items: center;
+			justify-content:center;
+		}
+		.column_img img{
+			width: 80%;
+			margin:0 auto;
+		}
+		.column_tit{
+			font-size: 24px;
+			text-align: center;
+			font-weight: bold;
+			padding: 0.5rem 0;
+		}
+		.column_small{
+			font-size: 15px;
+			color:#5a5a5a;
+			text-align: center;
+		}
+		.space{
+			width:100%;
+			height: 1rem;
+			background-color: #f5f5f5;
+		}
+		.page_model{
+			width: 95%;
+			margin:0 2.5%;
+			min-height: 2rem;
+			height: auto;
+			overflow: auto;
+		}
+		.model_head{
+			width: 100%;
+			height: 3rem;
+			line-height: 3rem;
+			font-size: 20px;
+			color: #656565;
+			border-bottom: 0.08rem solid #e0e0e0;
+		}
+		.model_pic{
+			width: 30%;
+			padding:0.8rem 0;
+			float: left;
+		}
+		.model_pic li{
+			width: 100%;
+		}
+		.model_pic li img{
+			width: 100%;
+			height:47%;
+			padding:1.5% 0;
+		}
+		.model_des{
+			width: 35%;
+			float: left;
+			padding:0.8rem 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.model_des li{
+			width: 90%;
+			margin-left: 10%;
+			background-color:#f8f8f8;
+			height: 3rem;
+			line-height: 3rem;
+			text-align: center;
+		}
+		.article_list_box{
+			widows: 95%;
+			margin: 0 2.5%;
+			min-height: 2rem;
+			height: auto;
+			overflow: auto;
+		}
+		.article_list_box li{
+			width: 100%;
+			min-height: 1rem;
+			height: auto;
+			overflow: auto;
+			padding: 0.8rem 0;
+			border-bottom: 0.08rem solid #f2f2f2;
+		}
+		.article_pic{
+			width: 33%;
+			float:left;
+		}
+		.article_pic img{width: 100%;}
+		.article_content{
+			width: 63%;
+			float: left;
+			margin: 0 2%;
+		}
+		.article_content h3{
+			width: 100%;
+			font-size: 19px;
+			font-weight: bold;
+			height: 80%;
+		}
+		.article_content pre{
+			width: 100%;
+			height: 20%;
+			font-size: 19px;
+			color: #c6c6c6;
+		}
+		.another_article_list{
+			width: 95%;
+			margin:2.5%;
+			height: auto;
+			min-height: 2rem;
+			overflow: auto;
+		}
+		.another_article_list header{
+			width: 100%;
+			height: 3rem;
+			line-height: 3rem;
+			font-size: 19px;
+			font-weight: bold;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		}
+		.another_article_list ul{
+			width: 100%;
+			min-height: 1rem;
+			height: auto;
+			overflow: auto;
+		}
+		.another_article_list li{
+			width: 33.333333%;
+			height: auto;
+			min-height: 1rem;
+			overflow: auto;
+			float: left;
+		}
+		.another_article_list li img{
+			width: 95%;
+			margin: 0 auto;
+		}
+		.another_article_list pre{
+			width: 100%;
+			height: 2.5rem;
+			line-height: 2.5rem;
+			color:#c8c8c8;
+			font-size: 19px;
+		}
+	</style>
+</head>
+<body>
+	<header class="page_head">
+		<div class="return_btn">返回</div>
+		<div class="page_title">这是标题</div>
+	</header>
+	<nav class="page_nav">
+		<ul>
+			<li class="on">导航</li>
+			<li>导航</li>
+			<li>导航</li>
+			<li>导航</li>
+			<li>导航</li>
+		</ul>
+	</nav>
+	<div class="page_picture">
+		<img src="images/task_1_11_1_02.png">
+	</div>
+	<ul class="page_tag">
+		<li>
+			<p class="picture_box">
+				<img src="images/task_1_11_1_05.png" alt="标签">
+			</p>
+			<p class="picture_intro">标签</p>
+		</li>
+		<li>
+			<p class="picture_box">
+				<img src="images/task_1_11_1_05.png" alt="标签">
+			</p>
+			<p class="picture_intro">标签</p>
+		</li>
+		<li>
+			<p class="picture_box">
+				<img src="images/task_1_11_1_05.png" alt="标签">
+			</p>
+			<p class="picture_intro">标签</p>
+		</li>
+		<li>
+			<p class="picture_box">
+				<img src="images/task_1_11_1_05.png" alt="标签">
+			</p>
+			<p class="picture_intro">标签</p>
+		</li>
+		<li>
+			<p class="picture_box">
+				<img src="images/task_1_11_1_05.png" alt="标签">
+			</p>
+			<p class="picture_intro">标签</p>
+		</li>
+	</ul>
+	<ul class="page_column">
+		<li>
+			<p class="column_img">
+				<img src="images/task_1_11_1_09.png" alt="" id="column_01">
+			</p>
+			<p class="column_tit">分栏一</p>
+			<p class="column_small">分栏小标题</p>
+		</li>
+		<li>
+			<p class="column_img">
+				<img src="images/task_1_11_1_12.png" alt="">
+			</p>
+			<p class="column_tit">分栏二</p>
+			<p class="column_small">分栏小标题</p>
+		</li>
+		<li>
+			<p class="column_img">
+				<img src="images/task_1_11_1_15.png" alt="">
+			</p>
+			<p class="column_tit">分栏三</p>
+			<p class="column_small">分栏小标题</p>
+		</li>
+	</ul>
+	<div class="space"></div>
+	<div class="page_model">
+		<header class="model_head">模块一</header>
+		<ul class="model_pic">
+			<li>
+				<img src="images/task_1_11_1_21.png" alt="">
+			</li>
+			<li>
+				<img src="images/task_1_11_1_21.png" alt="">
+			</li>
+		</ul>
+		<ul class="model_des">
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+		</ul>
+		<ul class="model_des">
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+		</ul>
+	</div>
+	<div class="space"></div>
+	<div class="page_model">
+		<header class="model_head">模块二</header>
+		<ul class="model_pic">
+			<li>
+				<img src="images/task_1_11_1_21.png" alt="">
+			</li>
+			<li>
+				<img src="images/task_1_11_1_21.png" alt="">
+			</li>
+		</ul>
+		<ul class="model_des">
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+		</ul>
+		<ul class="model_des">
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+			<li>这是文案</li>
+		</ul>
+	</div>
+	<div class="space"></div>
+	<div class="article_list_box">
+		<ul>
+			<li>
+				<p class="article_pic">
+					<img src="images/task_1_11_1_25.png" alt="">
+				</p>
+				<div class="article_content">
+					<h3>这是文章标题字号是22的文章标题</h3>
+					<pre>文章来源 6分钟前</pre>
+				</div>
+			</li>
+			<li>
+				<p class="article_pic">
+					<img src="images/task_1_11_1_25.png" alt="">
+				</p>
+				<div class="article_content">
+					<h3>这是文章标题字号是22的文章标题</h3>
+					<pre>文章来源 6分钟前</pre>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="another_article_list">
+		<header>这个也是文章标题字号是22的文章标题</header>
+		<ul>
+			<li><img src="images/task_1_11_1_25.png" alt=""></li>
+			<li><img src="images/task_1_11_1_25.png" alt=""></li>
+			<li><img src="images/task_1_11_1_25.png" alt=""></li>
+		</ul>
+		<pre>文章来源 7分钟前</pre>
+	</div>
+	<script type="text/javascript">
+		var $page_w=$(window).width();
+		var column_h=$('#column_01').height();
+		var model_h=$('.model_pic').height();
+		var article_pic_h=$(".article_pic").height();
+		$('body').css("width",$page_w+'px');
+		$('.column_img').height(column_h+'px');
+		$('.page_model ul').height(model_h+'px');
+		$('.article_content').height(article_pic_h+'px');
+	</script>
+</body>
+</html>

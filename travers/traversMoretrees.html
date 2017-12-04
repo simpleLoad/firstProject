@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>遍历多叉树并查询</title>
+	<style type="text/css">
+		.bigBox{
+			min-width:50%;
+			height:auto;
+			border:3px solid #000;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			align-content: center;
+			background-color: #fff;
+		}
+		.secondBox,.thirdBox,.fourthBox,.addele{
+			margin:10px;
+			padding:5px;
+			width:50%;
+			border:3px solid #000;
+			height:90%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			align-content:center;
+			background-color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div class="bigBox" id="bigBox" value="1">
+		1
+		<div class="secondBox" value="2">2
+			<div class="thirdBox" value="5">5
+				<div class="fourthBox" value="29">29</div>
+				<div class="fourthBox" value="30">30</div>
+				<div class="fourthBox" value="31">31</div>
+			</div>
+			<div class="thirdBox" value="6">6
+				<div class="fourthBox" value="32">32</div>
+				<div class="fourthBox" value="33">33</div>
+				<div class="fourthBox" value="34">34</div>
+			</div>
+		</div>
+		<div class="secondBox" value="3">3
+			<div class="thirdBox" value="8">8
+				<div class="fourthBox" value="13">13</div>
+				<div class="fourthBox" value="14">14</div>
+			</div>
+			<div class="thirdBox" value="9">9
+				<div class="fourthBox" value="18">18</div>
+				<div class="fourthBox" value="19">19</div>
+				<div class="fourthBox" value="20">20</div>
+			</div>
+		</div>
+		<div class="secondBox" value="4">4
+			<div class="thirdBox" value="12">12
+				<div class="fourthBox" value="27">27</div>
+				<div class="fourthBox" value="28">28</div>
+			</div>
+			<div class="thirdBox" value="66">66
+				<div class="fourthBox" value="67">67</div>
+				<div class="fourthBox" value="68">68</div>
+			</div>
+		</div>
+	</div>
+	<p>
+		<button id="beforeBtn">前序遍历</button>
+		<button id="middelBtn">中序遍历</button>
+		<button id="backBtn">后序遍历</button>
+	</p>
+	<p>
+		<input type="text" name="" id="selectCon">
+		<button id="beforeSelect">前序查询</button>
+		<button id="backSelect">后序查询</button>
+	</p>
+	<p>
+		<input type="text" name="" id="addEle">
+		<button id="addeleBtn">添加</button>
+		<button id="deleteBtn">删除</button>
+	</p>
+</body>
+<script type="text/javascript">
+	var bigBox = document.getElementById('bigBox'),
+		beforeBtn = document.getElementById('beforeBtn'),
+		middelBtn = document.getElementById('middelBtn'),
+		backBtn = document.getElementById('backBtn'),
+		beforeSelect = document.getElementById('beforeSelect'),
+		backSelect = document.getElementById('backSelect'),
+		selectCon = document.getElementById('selectCon');
+	var divs = [];
+	var eles = [];
+	var Timer;
+	var targetEle = document.getElementsByName("chose"),
+		addeleNod =document.getElementById("addEle");
+	var divLength = document.getElementsByTagName('div').length,
+		alldivs = document.getElementsByTagName('div');
+	//console.log(divLength);
+	for (var i = 0; i < divLength; i++) {
+		alldivs[i].onclick = divsOnclick;
+	}
+	function divsOnclick(target){
+		clearAll();
+		target.stopPropagation();
+		//console.log(target);
+		//console.log(this);
+		this.style.background = "blue";
+		this.setAttribute("name","chose");
+		//console.log(this.children.length);
+		var childrens = this.children;
+		choseChild(childrens);
+	}
+	deleteBtn.onclick = function(){
+		//console.log(deleteTarget[0])
+		targetEle[0].remove();
+	}
+	addeleBtn.onclick = function(){
+		var para = document.createElement("div");
+		var node = document.createTextNode(addeleNod.value);
+		para.setAttribute("class","addele");
+		para.setAttribute("value",addeleNod.value);
+		para.appendChild(node);
+		targetEle[0].appendChild(para);
+		clearAll();
+	}
+	beforeBtn.onclick = function(){
+		clear();
+		before(bigBox);
+		chageColor();
+		console.log(eles);
+	}
+	middelBtn.onclick = function(){
+		clear();
+		middle(bigBox);
+		chageColor();
+	}
+	backBtn.onclick = function(){
+		clear();
+		back(bigBox);
+		chageColor();
+	}
+	beforeSelect.onclick = function(){
+		clear();
+		before(bigBox);
+		chageColor();
+	}
+	backSelect.onclick = function(){
+		clear();
+		back(bigBox);
+		chageColor();
+	}
+	function before(node){
+		if(divs.length != divLength){
+			if (node != null) {
+				divs.push(node);
+				var a = node.getAttribute("value");
+				eles.push(a);
+				console.log(node);
+				before(node.firstElementChild);
+				before(node.nextElementSibling);
+			}
+		}
+	}
+	function middle(node){
+		if (divs.length != divLength) {
+			if(node != null){
+				middle(node.firstElementChild);
+				divs.push(node);
+				var a = node.getAttribute("value");
+				eles.push(a);
+				middle(node.nextElementSibling);
+			}
+		}
+	}
+	function back(node){
+		if (divs.length != divLength) {
+			if(node != null){
+				back(node.firstElementChild);
+				back(node.nextElementSibling);
+				if (node.nodeName == "DIV") {
+					console.log(node.nodeName)
+					divs.push(node);
+					var a = node.getAttribute("value");
+					eles.push(a);
+				}
+			}
+		}
+	}
+	function clear(){
+		eles = [];
+		divs = [];
+		clearInterval(Timer);
+		var odivs = document.getElementsByTagName('div');
+		for(var i = 0;i < odivs.length;i++){
+			odivs[i].style.background = '#fff';
+		}
+	}
+	function chageColor(){
+		var i = 0;
+		if (eles[i] == selectCon.value) {
+			divs[i].style.background = "yellow";
+		}else{
+			divs[i].style.background = "#f00";
+				Timer = setInterval(function(){
+				i++;
+				if(i<divs.length){
+					if(eles[i] == selectCon.value){
+						divs[i-1].style.background = "#fff";
+						divs[i].style.background = "yellow";
+					}else{
+						divs[i-1].style.background = "#fff";
+						divs[i].style.background = "#f00";
+					}
+				}else{
+					clearInterval(Timer);
+					divs[divs.length-1].style.background = "#fff";
+				}
+			},500)
+		}
+	}
+	function clearAll(){
+		alldivs = document.getElementsByTagName('div');
+		for (var l = 0; l < alldivs.length; l++) {
+			alldivs[l].style.background = "#fff";
+			alldivs[l].removeAttribute("name");
+		}
+	}
+	function choseChild(r){
+			if(r.length != 0){
+				for (var i = 0; i < r.length; i++) {
+					r[i].style.background = "blue";
+					var vv = r[i].children;
+					choseChild(vv);
+				}
+			}
+		}
+</script>
+</html>
