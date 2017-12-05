@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>表单-联动练习</title>
+	<style type="text/css">
+		.choseIdentity{
+			width:50%;
+			height: 40px;
+			line-height: 40px;
+			margin: 0 auto;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			align-content: center;
+		}
+		.hide{display: none;}
+		.show{display:inline-block;}
+	</style>
+</head>
+<body>
+	<p class="choseIdentity">
+		<span>
+			<input type="radio" name="identity" id="onschool" onclick = "onschool(schools,company)" checked>
+			<label for="onschool">在校生</label>
+		</span>
+		<span>
+			<input type="radio" name="identity" id="noschool" onclick = "onschool(company,schools)">
+			<label for="noschool">非在校生</label>
+		</span>
+	</p>
+	<div class="choseIdentity">
+		<p id="schools">
+			<label for="">学校</label>
+			<select name="city" id="city">
+				<option value="bjschool">北京</option>
+				<option value="shschool">上海</option>
+				<option value="gzschool">广州</option>
+				<option value="qdschool">青岛</option>
+			</select>
+			<select name="bjschool" id="bjschool">
+				<option value="beijing01">北京大学01</option>
+				<option value="beijing02">北京大学02</option>
+				<option value="beijing03">北京大学03</option>
+				<option value="beijing04">北京大学04</option>
+			</select>
+			<select name="shschool" id="shschool" class="hide">
+				<option value="shanghai01">上海大学01</option>
+				<option value="shanghai02">上海大学02</option>
+				<option value="shanghai03">上海大学03</option>
+				<option value="shanghai04">上海大学04</option>
+			</select>
+			<select name="gzschool" id="gzschool" class="hide">
+				<option value="guangzhou01">广州大学01</option>
+				<option value="guangzhou02">广州大学02</option>
+				<option value="guangzhou03">广州大学03</option>
+				<option value="guangzhou04">广州大学04</option>
+			</select>
+			<select name="qdschool" id="qdschool" class="hide">
+				<option value="qingdao01">青岛大学01</option>
+				<option value="qingdao02">青岛大学02</option>
+				<option value="qingdao03">青岛大学03</option>
+				<option value="qingdao04">青岛大学04</option>
+			</select>
+		</p>
+		<p class="hide" id="company"> 
+			<label for="">就业单位</label>
+			<input type="text">
+		</p>
+	</div>
+	<script type="text/javascript">
+		var schools = document.getElementById('schools'),
+			company = document.getElementById('company'),
+			ocitys = document.getElementById('city'),
+			selects = document.getElementsByTagName('select');
+		ocitys.onclick = function(){
+			var index = ocitys.selectedIndex;
+			//console.log(index);
+			showSelect(index);
+		}
+		function showSelect(index){
+			for (var i = 1; i < selects.length; i++) {
+				selects[i].className = 'hide';
+			}
+			selects[index+1].className = 'show';
+		}
+		function onschool(a,b){
+			//点击单选按钮判断显示的内容
+			a.className = 'show';
+			b.className = 'hide';
+		}
+	</script>
+</body>
+</html>
