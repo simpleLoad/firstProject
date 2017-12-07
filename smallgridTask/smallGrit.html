@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>听指令的小方格</title>
+	<style>
+		body{background-color: #000;}
+		body,h3,p,li,ul{
+			margin:0;
+			padding: 0;
+		}
+		.content{
+			margin: 0 auto;
+			background:#fff;
+			width: 550px;
+			position: relative;
+			height: 615px;
+			padding: 0px 50px 50px;
+		}
+		h3{
+			width:550px;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			padding: 10px 0 15px 0;
+		}
+		.topSign{
+			display: block;
+			width: 500px;
+			height:50px;
+			line-height: 50px;
+			margin-left: 30px;
+		}
+		.topSign li{
+			list-style: none;
+			width: 10%;
+			float: left;
+			text-align: center;
+		}
+		.leftSign{
+			display: block;
+			width: 50px;
+			height:500px;
+			line-height: 50px;
+			position: absolute;
+			bottom:50px;
+			left: 30px;
+		}
+		.leftSign li{
+			list-style: none;
+			width: 100%;
+			text-align: center;
+		}
+		.canvas{
+			width: 498px;
+			height: 498px;
+			position: absolute;
+			bottom:50px;
+			left: 80px;
+			border:1px solid #000; 
+			background-image: repeating-linear-gradient(to right,transparent,transparent 48px,#d3d3d3 48px,#d3d3d3 50px),repeating-linear-gradient(to bottom,transparent,transparent 48px,#d3d3d3 48px,#d3d3d3 50px);
+		}
+		.movegrit{
+			position: absolute;
+			width: 48px;
+			height: 48px;
+			background-image: repeating-linear-gradient(to bottom,blue,blue 20%,red 20%,red 100%)
+		}
+		.control{
+			position: absolute;
+			bottom: 10px;
+			left:80px;
+		}
+	</style>
+</head>
+<body>
+	<div class="content">
+		<h3>听指令的小方格</h3>
+		<ul class="topSign">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+			<li>9</li>
+			<li>10</li>
+		</ul>
+		<ul class="leftSign">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+			<li>9</li>
+			<li>10</li>
+		</ul>
+		<div class="canvas">
+			<div class="movegrit" style="top:0;left: 0;transform: rotate(0deg);"></div>
+		</div>
+		<div class="control">
+			<input type="text" id="controlText">
+			<button>执行</button>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var controText = document.getElementById('controlText'),
+			carryOut = document.getElementsByTagName('button'),
+			movegrit = document.getElementsByClassName('movegrit'),
+			numDeg = movegrit[0].style.transform,
+			key = numDeg.substring(7,numDeg.length-4);
+			//console.log(key);
+			//console.log(topNum);
+			carryOut[0].onclick = function(){
+				var movex = parseInt(movegrit[0].style.left);
+				var movey = parseInt(movegrit[0].style.top);
+				if(controlText.value == "GO"){
+					goOn();
+				}
+				if(controlText.value == "TUN LEF"){
+					derection(-90);
+				}
+				if(controlText.value == "TUN RIG"){
+					derection(90);
+				}
+				if(controlText.value == "TUN BAC"){
+					derection(180);
+				}
+				if(controlText.value == "TRA LEF"){
+					moveLef(movex,-50);
+				}
+				if(controlText.value == "TRA TOP"){
+					moveTop(movey,-50);
+				}
+				if(controlText.value == "TRA RIG"){
+					moveLef(movex,50);
+				}
+				if(controlText.value == "TRA BOT"){
+					moveTop(movey,50);
+				}
+				if(controlText.value == "MOV RIG"){
+					key=90;
+					changeDir(key);
+					moveLef(movex,50);
+				}
+				if(controlText.value == "MOV TOP"){
+					key=0;
+					changeDir(key);
+					moveTop(movey,-50);
+				}
+				if(controlText.value == "MOV LEF"){
+					key=-90;
+					changeDir(key);
+					moveLef(movex,-50);
+				}
+				if(controlText.value == "MOV BOT"){
+					key=180;
+					changeDir(key);
+					moveTop(movey,50);
+				}
+			}
+			function derection(n){
+				key= parseInt(key)+n;
+					if (key == -180) {
+						key = 180;
+					}else if (key == 270) {
+						key = -90;
+					}else if (key == 360) {
+						key = 0;
+					}
+					movegrit[0].style.transform = "rotate("+key+"deg)";
+			}
+			function goOn(){
+				var	topNum = movegrit[0].style.top,
+					leftNum = movegrit[0].style.left,
+					y = parseInt(topNum),
+					x = parseInt(leftNum);
+					if (key == 0){
+						moveDis(y,-50);
+					}
+					 if (key == 90){
+					 	moveDis(x,50);
+					}
+					 if (key == 180){
+					 	moveDis(y,50);
+					}
+					 if (key == -90){
+					 	moveDis(x,-50);
+					}
+			}
+			function moveDis(a,d){
+						if(a+d != 500&& a+d !=-50){
+							if (Math.abs(key) == 90) {
+							movegrit[0].style.left = a+d+"px";
+						}	
+						if (key == 0 || key == 180) {
+							movegrit[0].style.top = a+d+"px";
+						}
+					}
+			}
+			function moveLef(a,b){
+				if(a+b != 500&& a+b !=-50){
+						movegrit[0].style.left =a+b+"px";
+					}
+			}
+			function moveTop(a,b){
+				if(a+b!= 500&& a+b !=-50){
+						movegrit[0].style.top =a+b+"px";
+					}
+			}
+			function changeDir(key){
+						movegrit[0].style.transform = "rotate("+key+"deg)";
+					}
+	</script>
+<!-- 	TRA LEF：向屏幕的左侧移动一格，方向不变
+TRA TOP：向屏幕的上面移动一格，方向不变
+TRA RIG：向屏幕的右侧移动一格，方向不变
+TRA BOT：向屏幕的下面移动一格，方向不变
+MOV LEF：方向转向屏幕左侧，并向屏幕的左侧移动一格
+MOV TOP：方向转向屏幕上面，向屏幕的上面移动一格
+MOV RIG：方向转向屏幕右侧，向屏幕的右侧移动一格
+MOV BOT：方向转向屏幕下面，向屏幕的下面移动一格 -->
+</body>
+</html>
