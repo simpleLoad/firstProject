@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Flayer</title>
+	<style type="text/css">
+		body{
+			width: 100%;
+			height: 800px;
+			background-image:repeating-linear-gradient(135deg,#8382A0,#8382A0 88px,#407698 88px,#407698 176px,#5CA2BF 176px,#5CA2BF 352px,#62C3C7 352px,#62C3C7 704px,#BAD9DD 704px,#BAD9DD 800px);
+			overflow: hidden;
+		}
+		.screen{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			z-index: 100;
+			background-color: rgba(236,234,239,.5);
+			opacity: 0;
+			display: none;
+		}
+		.btnBox{
+			position: absolute;
+			top: 0;
+			width: 100px;
+			height: 100px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			align-content: center;
+		}
+		.popbtn{
+			background-color: #fff;
+			border:0;
+			width: 80px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			outline: #fff;
+			border-radius: 100px;
+			box-shadow: 0px 0px 100px 5px rgba(0, 0, 255, .2);
+		}
+		.popbtn:hover{
+			color:#3B95E7;
+		}
+		.flayer{
+			position: fixed;
+			z-index: 101;
+			width: 460px;
+			height: 280px;
+			min-width: 260px;
+			min-height: 180px;
+			max-width: 1321px;
+			max-height: 600px;
+			box-shadow: 0px 0px 30px 5px rgba(0,0,0,.5);
+			opacity: 0;
+			display: none;
+		}
+		.flayer header{
+			background-color: #F8F8F8;
+			width: 100%;
+			height: 20%;
+			cursor: move;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			align-content: center;
+		}
+		.flayerCon{
+			background: #fff;
+			width: 100%;
+			height: 80%;
+		}
+		.flayerText{
+			width: 100%;
+			height: 60%;
+			text-indent: 2rem;
+			padding-top: 20px;
+		}
+		.btnline{
+			width: 100%;
+			height: 30%;
+			display: flex;
+			align-items: center;
+			align-content: center;
+			justify-content: space-evenly;
+		}
+		.result,.cancel{
+			background-color: #1F7CFF;
+			color: #fff;
+			border-radius: 2px;
+			border:0;
+			outline: 0;
+			width: 100px;
+			height: 30px;
+			line-height: 30px;
+		}
+		.flayer>i{
+			position: absolute;
+		}
+		#flarerT{
+			top:0;
+			left:0;
+			width: 100%; 
+			height: 3px;
+			cursor: ns-resize;
+		}
+		#flarerR{
+			top:0;
+			right:0;
+			height: 100%; 
+			width: 3px;
+			cursor: ew-resize;
+		}
+		#flarerB{
+			bottom:0;
+			left:0;
+			width: 100%;
+			height: 3px; 
+			cursor: ns-resize;
+		}
+		#flarerL{
+			top:0;
+			left:0;
+			height: 100%; 
+			width: 3px;
+			cursor: ew-resize;
+		}
+		#flarerLT{
+			top:0;
+			left:0;
+			cursor: nwse-resize;
+		}
+		#flarerRT{
+			top:0;
+			right:0;
+			cursor: nesw-resize;
+		}
+		#flarerRB{
+			bottom:0;
+			right:0; 
+			cursor: nwse-resize;
+		}
+		#flarerLB{
+			bottom:0;
+			left:0; 
+			cursor: nesw-resize;
+		}
+		#flarerLT,#flarerRT,#flarerRB,#flarerLB{
+			width: 5px;
+			height: 5px; 
+		}
+		.hint{
+			width: 150px;
+		    height: 55px;
+		    line-height: 45px;
+		    background-color: rgba(0,0,0,0.2);
+		    color: #fff;
+		    border-radius: 5px;
+		    display: none;
+		    align-items: center;
+		    align-content: center;
+		    justify-content: center;
+		    position: absolute;
+		    z-index: 118;
+		}
+	</style>
+</head>
+<body>
+	<div class="screen" id="screen"></div>
+	<div class="btnBox" id="btnBox">
+		<button class="popbtn" id="popbtn">弹出</button>
+	</div>
+	<div class="flayer" id="flayer">
+		<header id="flayerHead">
+			<p class="flayerTit">提示</p>
+		</header>
+		<div class="flayerCon" id="flayerCon">
+			<div class="flayerText" id="flayerText">这是一个弹出层</div>
+			<div class="btnline" id="btnline">
+				<button class="result" id="result">确认</button>
+				<button class="cancel" id="cancel">取消</button>
+			</div>
+		</div>
+		<i id="flarerT"></i>
+		<i id="flarerR"></i>
+		<i id="flarerB"></i>
+		<i id="flarerL"></i>
+		<i id="flarerLT"></i>
+		<i id="flarerRT"></i>
+		<i id="flarerRB"></i>
+		<i id="flarerLB"></i>
+	</div>
+	<div class="hint" id="hint">That's OK!</div>
+	<script type="text/javascript">
+		 var $ = function(id) {
+	        return document.getElementById(id);
+	    };
+		 !(function(window, document) {
+			let Popup = function(flayer,popbtn,option){
+				this.ele = flayer;
+				this.screen = document.getElementById('screen');
+				this.show = popbtn;
+				this.flayerHead = document.getElementById('flayerHead');
+				this.result = document.getElementById('result');
+				this.cancel = document.getElementById('cancel');
+				this.i = document.getElementsByTagName('i');
+				this.hint = document.getElementById('hint');
+				this.windowWidth = window.innerWidth;
+				this.windowHeight = window.innerHeight;
+				this.maxWidth = parseInt(getComputedStyle(this.ele).maxWidth);
+				this.maxHeight = parseInt(getComputedStyle(this.ele).maxHeight);
+				this.minWidth = parseInt(getComputedStyle(this.ele).minWidth);
+				this.minHeight = parseInt(getComputedStyle(this.ele).minHeight);
+
+				this.deafault = option||{
+					isDrag: false,
+	                isDragLimit: false,
+	                isChangeSize: false
+				};
+				//console.log(this.ele);
+			}
+				
+				Popup.prototype = {
+            	constructor: Popup,
+
+            	
+
+	            inital: function() {
+	                let that = this;
+	                //console.log(this.show);
+	                this.show.addEventListener("click", function(e) {	                	
+	                	//console.log("567")
+	                    e.stopPropagation();
+	                    that.showPopup();
+	                    return false;
+	                });
+	                this.cancel.addEventListener("click",function(e){
+	                	e.stopPropagation();
+	                	that.offPopup();
+	                	return false;
+	                });
+	                this.result.addEventListener("click",function(e){
+	                	e.stopPropagation();
+	                	that.resultPopup();
+	                	return false;
+	                });
+	                this.screen.addEventListener("click",function(e){
+	                	e.stopPropagation();
+	                	that.offPopup();
+	                	return false;
+	                });
+	                if(this.deafault.isDrag){
+	                	this.flayerHead.addEventListener("mousedown",function(e){
+	                		e.stopPropagation();
+	                		that.isDrag();
+	                		return false;
+	                	})
+	                };
+	                if (this.deafault.isChangeSize) {
+	                	for (let v = 0; v < this.i.length; v++) {
+	                		this.i[v].addEventListener("mousedown",function(e){
+	                			e.stopPropagation();
+	                			that.changeSize(e,this);
+	                			return false;
+	                		})
+	                	}
+	                }
+	            },
+				//显示浮出层
+				showPopup:function(){
+					//console.log('Hello');
+					this.screen.style.display = "block";
+					this.screen.style.opacity = 1;
+					this.ele.style.opacity = 1;
+					this.ele.style.display = "block";
+					this.ele.style.top = (this.windowHeight - this.ele.offsetHeight)/2+"px";
+					this.ele.style.left = (this.windowWidth - this.ele.offsetWidth)/2+"px";
+				},
+				offPopup:function(){
+					this.screen.style.display = "none";
+					this.screen.style.opacity = 0;
+					this.ele.style.opacity = 0;
+					this.ele.style.display = "none";
+				},
+				resultPopup:function(){
+					this.hint.style.display = "flex";
+					this.hint.style.left = (this.windowWidth - this.hint.offsetWidth)/2+"px";
+					this.hint.style.top = (this.windowHeight - this.hint.offsetHeight)/2+"px";
+					setTimeout(function(){
+						this.hint.style.display = "none";
+					},1000)
+				},
+				isDrag:function(e){
+					let that = this;
+					let Event = e || window.event;
+					let targetX = Event.clientX - this.ele.offsetLeft;
+					let targetY =Event.clientY - this.ele.offsetTop;
+					let _move = true;
+					document.body.addEventListener("mousemove",function(e){
+						e.stopPropagation();
+						let Event = e || window.event;
+						let endX = Event.clientX - targetX;
+						let endY = Event.clientY - targetY;
+						if (that.deafault.isDragLimit) {
+							if (endX<0) {
+								endX = 0;
+							}else if(endX >= that.windowWidth - that.ele.offsetWidth){
+								endX = that.windowWidth - that.ele.offsetWidth;
+							}
+							if (endY<0) {
+								endY = 0;
+							}else if (endY >= that.windowHeight - that.ele.offsetHeight) {
+								endY = that.windowHeight - that.ele.offsetHeight;
+							}
+						}
+						if (_move) {
+							that.ele.style.left = endX + "px";
+							that.ele.style.top = endY + "px";
+						}
+					})
+					document.body.addEventListener("mouseup",function(e){
+						e.stopPropagation();
+						_move = false;
+						return false;
+					})
+				},
+				changeSize : function(e,ele){
+					let that = this;
+					let Event = e || window.event;
+					let targetX = Event.clientX;
+					let targetY = Event.clientY;
+					let nowW = this.ele.offsetWidth;
+					let nowH = this.ele.offsetHeight;
+					let _move = true;
+					let _newW;
+					let _newH;
+					let _left;
+					let _top;
+					document.body.addEventListener("mousemove",function(e){
+						e.stopPropagation();
+						//console.log(e)
+						if (_move) {
+							switch(ele.id){
+								case "flarerR":
+									{
+										_newW = e.clientX-targetX+nowW;
+									}
+								break;
+								case "flarerB":
+									{
+										_newH = e.clientY-targetY+nowH;
+
+									}
+								break;
+								case "flarerL":
+									{
+										_newW = targetX-e.clientX+nowW;
+										_left = e.clientX;
+									}
+								break;
+								case "flarerT":
+									{
+										_newH = targetY-e.clientY+nowH;
+										_top = e.clientY;
+									}
+								break;
+								case "flarerLT":
+									{
+										_newW = targetX - e.clientX  + nowW;
+										_newH = targetY - e.clientY + nowH;
+										_left = e.clientX;
+										_top = e.clientY;
+									}
+								break;
+								case "flarerRB":
+									{
+										_newW = e.clientX - targetX + nowW;
+										_newH = e.clientY - targetY + nowH;
+									}
+								break;
+								case "flarerLB":
+									{
+										_newW = targetX - e.clientX + nowW;
+										_newH = e.clientY - targetY + nowH;
+										_left = e.clientX;
+									}
+								break;
+								case "flarerRT":
+									{
+										_newW = e.clientX - targetX + nowW;
+										_newH = targetY - e.clientY + nowH;
+										_top = e.clientY;
+									}
+							}
+							if (_newW >= that.minWidth && _newW <= that.maxWidth) {
+								that.ele.style.width = _newW + "px";
+								that.ele.style.left = _left + "px";
+							}
+							if (_newH >= that.minHeight && _newH <= that.maxHeight) {
+								that.ele.style.height = _newH + "px";
+								that.ele.style.top = _top + "px";
+							}
+							return false;
+						}
+					})
+					document.body.addEventListener("mouseup",function(e){
+						e.stopPropagation();
+						_move = false;
+						return false;
+					})
+				}
+			}
+			window.Element.prototype.popup = function(btnElement, option) {
+				//console.log('target')
+            let pop = new Popup(this, btnElement, option);
+            return pop.inital();
+        }
+
+		})(window,document);
+
+		let opt = {
+	        isDrag: true,// 是否可以移动
+	        isDragLimit: true,// 是否可以移动出窗口
+	        isChangeSize: true// 是否可以改变浮出大小
+	    }
+	    $('flayer').popup($('popbtn'), opt);
+	</script>
+</body>
+</html>
