@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>表格排序</title>
+	<style type="text/css">
+		table{
+			width:800px;
+			height: 200px;
+			text-align: center;
+		}
+		table tr:first-child{
+			background-color: #5B5B5B;
+			color:#fff;
+		}
+		table,th,tr,td{
+			border:thin solid #D6D6D6;
+		}
+		.arrowIcon{position: relative;}
+		.arrow{
+			background-image: url(arrow.png);
+			background-repeat: no-repeat;
+			width: 15px;
+			height: 15px;
+			display: inline-block;
+			background-size:100%;
+			background-position: bottom;
+		    position: absolute;
+		    top: 10%;
+		    left: 70%;
+		}
+		.arrowDown{
+			background-image: url(arrowDown.png);
+			background-repeat: no-repeat;
+			width: 15px;
+			height: 15px;
+			display: inline-block;
+			background-size:100%;
+			position: absolute;
+		    bottom: 15%;
+		    left: 70%;
+		}
+	</style>
+</head>
+<body>
+	<table border="1" cellspacing="0" cellpadding="0" id="tab">
+	</table>
+	<script type="text/javascript">
+		var tabHeaders = {
+			heads:[{
+				name:'name',
+				label:'姓名',
+				sortab:false
+			},{
+				name:'chinese',
+				label:'语文',
+				sortab:true
+			},{
+				name:'math',
+				label:'数学',
+				sortab:true
+			},{
+				name:'english',
+				label:'英语',
+				sortab:true
+			},{
+				name:'total',
+				label:'总分',
+				sortab:true
+			}]
+		};
+		var tabDatas = [{
+			name:'小明',
+			chinese:'80',
+			math:'90',
+			english:'70',
+			total:'240'
+		},{
+			name:'小红',
+			chinese:'85',
+			math:'65',
+			english:'70',
+			total:'220'
+		},{
+			name:'小亮',
+			chinese:'90',
+			math:'70',
+			english:'70',
+			total:'230'
+		}]	
+		var tabs = document.getElementById('tab');
+		var tabHead = tabHeaders.heads;
+		var tabheadLen = tabHeaders.heads.length;
+		var datasLen = tabDatas.length;
+		function init(){
+			addHead();
+			addBody();
+		}	
+		function addHead(){
+			var newtr = addtr();
+			tabHead.forEach(function (item){
+				var newtd = addtd(item.label);
+				if (item.sortab) {
+					var val = item.name;
+					var arrow = addArrow();
+					var arrowDown =addArrowdown();
+					newtd.className = 'arrowIcon';
+					newtd.appendChild(arrow);
+					newtd.appendChild(arrowDown);
+					arrow.onclick = function(){
+						upSort(val);
+						tabs.innerText = ' ';
+						init();
+					}
+					arrowDown.onclick = function(){
+						downSort(val);
+						tabs.innerText = ' ';
+						init();
+					}
+				}
+				newtr.appendChild(newtd);
+			})
+			tabs.appendChild(newtr);
+		}
+		function addBody(){
+			for (var i = 0; i < tabDatas.length; i++) {
+				var newtr = addtr();	
+				for(var key in tabDatas[i]){
+					var newtd = addtd(tabDatas[i][key]);
+					newtr.appendChild(newtd);
+				}
+				tabs.appendChild(newtr);
+			}
+
+		}
+		//添加行
+		function addtr(){
+			var newtr = document.createElement('tr');
+			return newtr;
+		}
+		//添加单元格
+		function addtd(em){
+			var newtd = document.createElement('td');
+			var spanCon = document.createElement('span');
+			spanCon.innerText = em;
+			newtd.appendChild(spanCon);
+			return  newtd;
+		}
+		//添加排序按钮
+		function addArrow(){
+			var arrow = document.createElement('i');
+			arrow.className = 'arrow';
+			return arrow;
+		}
+		//添加降序按钮
+		function addArrowdown(){
+			var arrowDown = document.createElement('i');
+			arrowDown.className = 'arrowDown';
+			return arrowDown;
+		}
+		//升序
+		function upSort(val){
+			var upHandle = function(a,b){
+				return a[val] - b[val];
+			}
+			return tabDatas.sort(upHandle);
+		}
+		//降序
+		function downSort(val){
+			var downHandle = function(a,b){
+				return b[val] - a[val];
+			}
+			return tabDatas.sort(downHandle);
+		}
+		init();
+	</script>
+</body>
+</html>
